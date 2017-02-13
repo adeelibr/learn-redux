@@ -8,4 +8,5 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-require('./ReduxExample.js');
+// import './PureImpureFunctions';
+import './ReduxExample.js'
