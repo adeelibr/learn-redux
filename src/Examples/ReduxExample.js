@@ -1,4 +1,4 @@
-import { createStore } from 'redux';
+import Redux, { createStore } from 'redux';
 
 console.log('Starting Redux Examples');
 
@@ -12,18 +12,48 @@ let reducer = ( state = { name: 'Anonymous' }, action) => {
         default: 
             return state;
     }
-}
+}   
 
-let store = createStore(reducer);
+/**
+ * Initialize store, by using createStore and
+ * passing it the reducer
+ */
+// let store = createStore(reducer);
+
+/**
+ * This is how you use redux-dev-tools, which is chrome
+ * extension https://github.com/zalmoxisus/redux-devtools-extension
+ * the `eslint-disable no-underscore-dangle` is used to override the
+ * eslint configuration added by create-react-app
+ */
+/* eslint-disable no-underscore-dangle */
+const store = createStore(
+    reducer, /* preloadedState, */
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
+/* eslint-enable */
 
 // Subscribe To Changes
-let unsubscribe = store.subscribe(() => {
+store.subscribe(() => {
     let state = store.getState();
     console.log('Current State Name Is , ', state.name);
+    document.getElementById('redux-output').innerHTML = state.name
 });
 
-// let currentState = store.getState();
-// console.log('currentState ', currentState);
+/**
+ * If you at any time want to unsubscribe to the Changes
+ * being made to the store, then simply assign your store.subscribe()
+ * method to a variable and at any point in your code if you want to 
+ * unsubscribe just call that variable method like unsubscribe()
+ */
+// let unsubscribe = store.subscribe(() => {
+//     let state = store.getState();
+//     console.log('Current State Name Is , ', state.name);
+// });
+// unsubscribe();
+
+// Get Current State Of Your Store
+console.log('currentState ', store.getState());
 
 var action = {
     type: 'CHANGE_NAME',
@@ -31,9 +61,6 @@ var action = {
 };
 
 store.dispatch(action);
-
-// unsubscribe();
-
 store.dispatch({
     type: 'CHANGE_NAME',
     name: 'Kylie Monogue'
