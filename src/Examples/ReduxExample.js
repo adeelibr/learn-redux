@@ -3,71 +3,14 @@ import { createStore, combineReducers } from 'redux';
 console.log('Starting Redux Examples');
 
 /**
- * Default/Initial State Which Is Passed 
- * to the reducer as the default value
- * to the `state` param
- */
-let stateDefault = {
-    name: 'Anonymous',
-    hobbies: [],
-    movies: [],
-};
-
-let nextHobbyId = 1;
-let nextMovieId = 1;
-
-let oldReducer = ( state = stateDefault, action) => {
-    switch (action.type) {
-        case 'CHANGE_NAME':
-            return {
-                ...state,
-                name: action.name
-            };
-        case 'ADD_HOBBY':
-            return {
-                ...state,
-                hobbies: [
-                    ...state.hobbies, 
-                    {
-                        id: nextHobbyId++,
-                        hobby: action.hobby
-                    }
-                ]
-            };
-        case 'REMOVE_HOBBY':
-            return {
-                ...state,
-                hobbies: state.hobbies.filter((hobby, index) => hobby.id !== action.id)
-            };
-        case 'ADD_MOVIE':
-            return {
-                ...state,
-                movies: [
-                    ...state.movies,
-                    {
-                        id: nextMovieId++,
-                        title: action.movie.title,
-                        genre: action.movie.genre,
-                    }
-                ]
-            };
-        case 'REMOVE_MOVIE':
-            return {
-                ...state,
-                movies: state.movies.filter((movie, index) => movie.id !== action.id)
-            };
-        default: 
-            return state;
-    }
-}   
-
-/**
  * Initialize store, by using createStore and
  * passing it the reducer
  */
 // let store = createStore(reducer);
 
-// Name Reducers
+/**
+ * Name Reducers & Actions Generators
+ */
 let nameReducer = (state = 'Anonymous', action) => {
     switch (action.type) {
         case 'CHANGE_NAME': { 
@@ -78,7 +21,17 @@ let nameReducer = (state = 'Anonymous', action) => {
     }
 }
 
-// Hobbies Reducers
+let changeName = (name) => {
+    return {
+        type: 'CHANGE_NAME',
+        name: name
+    }
+}
+
+/**
+ * Hobbies Reducers & Actions Generators
+ */
+let nextHobbyId = 1;
 let hobbiesReducer = (state = [], action) => {
     switch (action.type) {
         case 'ADD_HOBBY': {
@@ -92,7 +45,23 @@ let hobbiesReducer = (state = [], action) => {
     }
 }
 
-// Movie Reducers
+let addHobby = (hobby) => {
+    return {
+        type: 'ADD_HOBBY',
+        hobby: hobby
+    }
+}
+let removeHobby = (id) => {
+    return {
+        type: 'REMOVE_HOBBY',
+        id: id
+    }
+}
+
+/**
+ * Movies Reducers & Actions Generators
+ */
+let nextMovieId = 1;
 let moviesReducer = (state = [], action) => {
     switch (action.type) {
         case 'ADD_MOVIE': {
@@ -105,6 +74,21 @@ let moviesReducer = (state = [], action) => {
             return state;
     }
 }
+
+let addMovie = (title, genre) => {
+    return {
+        type: 'ADD_MOVIE',
+        title: title,
+        genre: genre
+    }
+}
+let removeMovie = (id) => {
+    return {
+        type: 'REMOVE_MOVIE',
+        id: id,
+    };
+}
+
 
 /**
  * combineReducers is a more efficient way to
@@ -153,49 +137,14 @@ store.subscribe(() => {
 // Get Current State Of Your Store
 // console.log('currentState ', store.getState());
 
-var action = {
-    type: 'CHANGE_NAME',
-    name: 'James Bond'
-};
-store.dispatch(action);
-
-store.dispatch({
-    type: 'ADD_HOBBY',
-    hobby: 'Running',
-});
-
-store.dispatch({
-    type: 'ADD_HOBBY',
-    hobby: 'walking',
-});
-
-store.dispatch({
-    type: 'REMOVE_HOBBY',
-    id: 2,
-});
-
-store.dispatch({
-    type: 'CHANGE_NAME',
-    name: 'Kylie Monogue'
-});
-
-store.dispatch({
-    type: 'ADD_MOVIE',
-    title: 'Raiders Of The Lost Ark',
-    genre: 'sci-fy'
-})
-
-store.dispatch({
-    type: 'ADD_MOVIE',
-    title: 'Moana',
-    genre: 'animated'
-
-})
-
-store.dispatch({
-    type: 'REMOVE_MOVIE',
-    id: 2,
-});
+store.dispatch(changeName('James Bond'));
+store.dispatch(addHobby('Running'));
+store.dispatch(addHobby('Walking'));
+store.dispatch(removeHobby(2));
+store.dispatch(changeName('Connor McGreygor'));
+store.dispatch(addMovie('Indian Jones', 'sci-fy'));
+store.dispatch(addMovie('Moana', 'animated'));
+store.dispatch(removeMovie(2));
 
 // console.log('currentState after store dispatch', store.getState());
 

@@ -10,5 +10,6 @@ ReactDOM.render(
 
 // import './Examples/PureImpureFunctions';
 
+// import './Examples/SimpleReduxStore.js';
 import './Examples/ReduxExample.js';
 // import './Examples/TodoReduxExample.js';
