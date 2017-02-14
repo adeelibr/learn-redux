@@ -1,5 +1,5 @@
 .App {
-    margin: 200px 0px;
+    margin: 200px 0px 10px 0px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,4 +8,8 @@
 p {
     font-size: 48px;
     font-family: sans-serif;
+}
+
+#redux-output {
+    text-align: center;
 }
