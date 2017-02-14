@@ -34,6 +34,11 @@ let reducer = ( state = stateDefault, action) => {
                     }
                 ]
             };
+        case 'REMOVE_HOBBY':
+            return {
+                ...state,
+                hobbies: state.hobbies.filter((hobby, index) => hobby.id !== action.id)
+            };
         case 'ADD_MOVIE':
             return {
                 ...state,
@@ -45,6 +50,11 @@ let reducer = ( state = stateDefault, action) => {
                         genre: action.movie.genre,
                     }
                 ]
+            };
+        case 'REMOVE_MOVIE':
+            return {
+                ...state,
+                movies: state.movies.filter((movie, index) => movie.id !== action.id)
             };
         default: 
             return state;
@@ -100,12 +110,17 @@ store.dispatch(action);
 
 store.dispatch({
     type: 'ADD_HOBBY',
-    hobby: 'running',
+    hobby: 'Running',
 });
 
 store.dispatch({
     type: 'ADD_HOBBY',
     hobby: 'walking',
+});
+
+store.dispatch({
+    type: 'REMOVE_HOBBY',
+    id: 2,
 });
 
 store.dispatch({
@@ -128,6 +143,11 @@ store.dispatch({
         genre: 'animated'
     }
 })
+
+store.dispatch({
+    type: 'REMOVE_MOVIE',
+    id: 2,
+});
 
 // console.log('currentState after store dispatch', store.getState());
 
