@@ -1,4 +1,4 @@
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 
 console.log('Starting Redux Examples');
 
@@ -16,7 +16,7 @@ let stateDefault = {
 let nextHobbyId = 1;
 let nextMovieId = 1;
 
-let reducer = ( state = stateDefault, action) => {
+let oldReducer = ( state = stateDefault, action) => {
     switch (action.type) {
         case 'CHANGE_NAME':
             return {
@@ -66,6 +66,57 @@ let reducer = ( state = stateDefault, action) => {
  * passing it the reducer
  */
 // let store = createStore(reducer);
+
+// Name Reducers
+let nameReducer = (state = 'Anonymous', action) => {
+    switch (action.type) {
+        case 'CHANGE_NAME': { 
+            return action.name;
+        }
+        default:
+            return state;
+    }
+}
+
+// Hobbies Reducers
+let hobbiesReducer = (state = [], action) => {
+    switch (action.type) {
+        case 'ADD_HOBBY': {
+            return [ ...state, { id: nextHobbyId++, hobby: action.hobby } ];
+        }
+        case 'REMOVE_HOBBY': {
+            return state.filter((hobby, index) => hobby.id !== action.id);
+        }
+        default: 
+            return state;
+    }
+}
+
+// Movie Reducers
+let moviesReducer = (state = [], action) => {
+    switch (action.type) {
+        case 'ADD_MOVIE': {
+            return [ ...state, { id: nextMovieId++, title: action.title, genre: action.genre } ];
+        }
+        case 'REMOVE_MOVIE': {
+            return state.filter((movie, index) => movie.id !== action.id);
+        }
+        default: 
+            return state;
+    }
+}
+
+/**
+ * combineReducers is a more efficient way to
+ * mangage your reduces rather then putting all of 
+ * your reducers in a single function e.g, oldReducer() 
+ * function in the code above.
+ */
+let reducer = combineReducers({
+    name: nameReducer,
+    hobbies: hobbiesReducer,
+    movies: moviesReducer,
+});
 
 /**
  * This is how you use redux-dev-tools, which is chrome
@@ -130,18 +181,15 @@ store.dispatch({
 
 store.dispatch({
     type: 'ADD_MOVIE',
-    movie: {
-        title: 'Raiders Of The Lost Ark',
-        genre: 'sci-fy'
-    }
+    title: 'Raiders Of The Lost Ark',
+    genre: 'sci-fy'
 })
 
 store.dispatch({
     type: 'ADD_MOVIE',
-    movie: {
-        title: 'Moana',
-        genre: 'animated'
-    }
+    title: 'Moana',
+    genre: 'animated'
+
 })
 
 store.dispatch({
