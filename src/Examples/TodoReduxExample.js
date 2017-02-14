@@ -6,7 +6,7 @@ let stateDefault = {
     todos: []
 };
 
-let reducer = (state=stateDefault, action) => {
+let reducer = (state = stateDefault, action) => {
     switch (action.type) {
         case 'CHANGE_SEARCH_TEXT':
             return { 
@@ -19,8 +19,7 @@ let reducer = (state=stateDefault, action) => {
 }
 let store = createStore(reducer);
 
-let currentState = store.getState();
-console.log('current state of store ', currentState);
+console.log('current state of store ', store.getState());
 
 var action = {
     type: 'CHANGE_SEARCH_TEXT',
