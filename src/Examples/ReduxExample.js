@@ -3,7 +3,6 @@ import { createStore } from 'redux';
 console.log('Starting Redux Examples');
 
 let reducer = ( state = { name: 'Anonymous' }, action) => {
-    console.log('New Action ', action);
     switch (action.type) {
         case 'CHANGE_NAME':
             return {
@@ -17,8 +16,14 @@ let reducer = ( state = { name: 'Anonymous' }, action) => {
 
 let store = createStore(reducer);
 
-let currentState = store.getState();
-console.log('currentState ', currentState);
+// Subscribe To Changes
+let unsubscribe = store.subscribe(() => {
+    let state = store.getState();
+    console.log('Current State Name Is , ', state.name);
+});
+
+// let currentState = store.getState();
+// console.log('currentState ', currentState);
 
 var action = {
     type: 'CHANGE_NAME',
@@ -27,6 +32,13 @@ var action = {
 
 store.dispatch(action);
 
-console.log('currentState after store dispatch', store.getState());
+// unsubscribe();
+
+store.dispatch({
+    type: 'CHANGE_NAME',
+    name: 'Kylie Monogue'
+});
+
+// console.log('currentState after store dispatch', store.getState());
 
 
