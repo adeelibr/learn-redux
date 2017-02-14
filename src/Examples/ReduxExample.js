@@ -1,13 +1,50 @@
-import Redux, { createStore } from 'redux';
+import { createStore } from 'redux';
 
 console.log('Starting Redux Examples');
 
-let reducer = ( state = { name: 'Anonymous' }, action) => {
+/**
+ * Default/Initial State Which Is Passed 
+ * to the reducer as the default value
+ * to the `state` param
+ */
+let stateDefault = {
+    name: 'Anonymous',
+    hobbies: [],
+    movies: [],
+};
+
+let nextHobbyId = 1;
+let nextMovieId = 1;
+
+let reducer = ( state = stateDefault, action) => {
     switch (action.type) {
         case 'CHANGE_NAME':
             return {
                 ...state,
                 name: action.name
+            };
+        case 'ADD_HOBBY':
+            return {
+                ...state,
+                hobbies: [
+                    ...state.hobbies, 
+                    {
+                        id: nextHobbyId++,
+                        hobby: action.hobby
+                    }
+                ]
+            };
+        case 'ADD_MOVIE':
+            return {
+                ...state,
+                movies: [
+                    ...state.movies,
+                    {
+                        id: nextMovieId++,
+                        title: action.movie.title,
+                        genre: action.movie.genre,
+                    }
+                ]
             };
         default: 
             return state;
@@ -36,8 +73,8 @@ const store = createStore(
 // Subscribe To Changes
 store.subscribe(() => {
     let state = store.getState();
-    console.log('Current State Name Is , ', state.name);
-    document.getElementById('redux-output').innerHTML = state.name
+    console.log('New State Is ', state); 
+    document.getElementById('redux-output').innerHTML = JSON.stringify(state);
 });
 
 /**
@@ -53,18 +90,44 @@ store.subscribe(() => {
 // unsubscribe();
 
 // Get Current State Of Your Store
-console.log('currentState ', store.getState());
+// console.log('currentState ', store.getState());
 
 var action = {
     type: 'CHANGE_NAME',
     name: 'James Bond'
 };
-
 store.dispatch(action);
+
+store.dispatch({
+    type: 'ADD_HOBBY',
+    hobby: 'running',
+});
+
+store.dispatch({
+    type: 'ADD_HOBBY',
+    hobby: 'walking',
+});
+
 store.dispatch({
     type: 'CHANGE_NAME',
     name: 'Kylie Monogue'
 });
+
+store.dispatch({
+    type: 'ADD_MOVIE',
+    movie: {
+        title: 'Raiders Of The Lost Ark',
+        genre: 'sci-fy'
+    }
+})
+
+store.dispatch({
+    type: 'ADD_MOVIE',
+    movie: {
+        title: 'Moana',
+        genre: 'animated'
+    }
+})
 
 // console.log('currentState after store dispatch', store.getState());
 
